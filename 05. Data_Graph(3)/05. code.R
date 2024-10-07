@@ -1,5 +1,5 @@
 # step1
-survey <- readxl::read_xlsx('05. 2024STB_survey_80.xlsx')
+survey <- readxl::read_xlsx('05. Data_Graph(3)/05. 2024STB_survey_80.xlsx')
 # Redefine column names
 colnames(survey) <- c(
   "Gender", 
@@ -59,11 +59,21 @@ gender_relative_freq
 
 # step 4 
 # Crosstab for Gender and Grade
+
+survey$Grade <- ifelse(survey$Grade == "2학년 / 2年级", 'Grade 2',
+                               ifelse(survey$Grade == "3학년 / 3年级", 'Grade 3',
+                                      ifelse(survey$Grade == "4학년 / 4年级", 'Grade 4',
+                                             ifelse(survey$Grade == "5학년 / 5年级", 'Grade 5', NA))))
+
 gender_grade_crosstab <- table(survey$Gender, survey$Grade)
 gender_grade_crosstab
 
 # step 5
 # Bar plot for Nationality
+survey$Nationality <- ifelse(survey$Nationality == "한국 / 韓國", "Korea",
+                                     ifelse(survey$Nationality == "중국 / 中國", "China",
+                                            ifelse(survey$Nationality == "몽골", "Mongolia", NA)))
+
 barplot(table(survey$Nationality), 
         main = "Bar Plot for Nationality", 
         xlab = "Nationality", 
@@ -72,6 +82,13 @@ barplot(table(survey$Nationality),
 
 # step 6
 # Horizontal bar plot for Residential Area
+survey$Residential_Area <- ifelse(survey$Residential_Area == "경기 競技", "Gyeonggi",
+                                          ifelse(survey$Residential_Area == "인천 仁川", "Incheon",
+                                                 ifelse(survey$Residential_Area == "전남 全南", "Jeonnam",
+                                                        ifelse(survey$Residential_Area == "서울 首尔", "Seoul",
+                                                               ifelse(survey$Residential_Area == "충남 忠南", "Chungnam",
+                                                                      ifelse(survey$Residential_Area == "경남 庆南", "Gyeongnam", NA))))))
+par(cex.axis = 0.7)
 barplot(table(survey$Residential_Area), 
         main = "Horizontal Bar Plot for Residential Area", 
         xlab = "Frequency", 
@@ -109,10 +126,10 @@ boxplot(as.numeric(survey$Age) ~ survey$Grade,
 
 # step 11
 
-survey$Grade_numeric <- ifelse(survey$Grade == "2학년 / 2年级", 2,
-                               ifelse(survey$Grade == "3학년 / 3年级", 3,
-                                      ifelse(survey$Grade == "4학년 / 4年级", 4,
-                                             ifelse(survey$Grade == "5학년 / 5年级", 5, NA))))
+survey$Grade_numeric <- ifelse(survey$Grade == "Grade 2", 2,
+                               ifelse(survey$Grade == "Grade 3", 3,
+                                      ifelse(survey$Grade == "Grade 4", 4,
+                                             ifelse(survey$Grade == "Grade 5", 5, NA))))
 
 # Scatter plot 
 plot(as.numeric(survey$Age), survey$Grade_numeric, 
